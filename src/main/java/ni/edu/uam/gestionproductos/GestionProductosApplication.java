@@ -1,4 +1,4 @@
-package com.example.gestion_productos;
+package ni.edu.uam.gestionproductos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

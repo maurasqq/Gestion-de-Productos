@@ -1,4 +1,4 @@
-package com.example.gestion_productos.entity;
+package ni.edu.uam.gestionproductos.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

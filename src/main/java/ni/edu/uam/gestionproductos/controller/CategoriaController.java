@@ -1,4 +1,4 @@
-package com.example.gestion_productos.controller;
+package ni.edu.uam.gestionproductos.controller;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.gestion_productos.entity.Categoria;
-import com.example.gestion_productos.repository.CategoriaRepository;
+import ni.edu.uam.gestionproductos.entity.Categoria;
+import ni.edu.uam.gestionproductos.repository.CategoriaRepository;
 
 @RestController
 @RequestMapping("/api/categorias")

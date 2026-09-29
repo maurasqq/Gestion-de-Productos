@@ -1,8 +1,8 @@
-package com.example.gestion_productos.repository;
+package ni.edu.uam.gestionproductos.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.gestion_productos.entity.Producto;
+import ni.edu.uam.gestionproductos.entity.Producto;
 
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 }
