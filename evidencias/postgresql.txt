@@ -1,0 +1,25 @@
+installed_rank | version |              description              | success
+----------------+---------+---------------------------------------+---------
+              1 | 1       | crear tablas                          | t
+              2 | 2       | agregar descripcion producto          | t
+              3 | 3       | crear proveedor y relacionar producto | t
+(3 rows)
+
+ id |    nombre    | activa
+----+--------------+--------
+  1 | Computadoras | t
+  2 | Accesorios   | t
+  3 | Monitores    | t
+(3 rows)
+
+ id |       nombre        | telefono  |          correo           | activo
+----+---------------------+-----------+---------------------------+--------
+  1 | Tech Distribuciones | 8888-1111 | ventas@techdist.com       | t
+  2 | Global Hardware     | 8888-2222 | ventas@globalhardware.com | t
+(2 rows)
+
+ id | codigo  |    nombre     | precio_venta | existencia | categoria_id |  categoria   | proveedor_id |      proveedor
+----+---------+---------------+--------------+------------+--------------+--------------+--------------+---------------------
+  1 | LAP-001 | Laptop Lenovo |       850.00 |         10 |            1 | Computadoras |              |
+  2 | LAP-002 | Laptop Dell   |       950.00 |          8 |            1 | Computadoras |            1 | Tech Distribuciones
+(2 rows)

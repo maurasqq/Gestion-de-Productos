@@ -1,0 +1,86 @@
+[
+  {
+    "method": "GET",
+    "url": "http://localhost:8080/api/categorias",
+    "status": 200,
+    "body": [
+      {
+        "activa": true,
+        "id": 1,
+        "nombre": "Computadoras"
+      },
+      {
+        "activa": true,
+        "id": 2,
+        "nombre": "Accesorios"
+      },
+      {
+        "activa": true,
+        "id": 3,
+        "nombre": "Monitores"
+      }
+    ]
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8080/api/proveedores",
+    "status": 200,
+    "body": [
+      {
+        "activo": true,
+        "correo": "ventas@techdist.com",
+        "id": 1,
+        "nombre": "Tech Distribuciones",
+        "telefono": "8888-1111"
+      },
+      {
+        "activo": true,
+        "correo": "ventas@globalhardware.com",
+        "id": 2,
+        "nombre": "Global Hardware",
+        "telefono": "8888-2222"
+      }
+    ]
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8080/api/productos",
+    "status": 200,
+    "body": [
+      {
+        "categoria": {
+          "activa": true,
+          "id": 1,
+          "nombre": "Computadoras"
+        },
+        "codigo": "LAP-001",
+        "descripcion": null,
+        "existencia": 10,
+        "id": 1,
+        "nombre": "Laptop Lenovo",
+        "precioVenta": 850.0,
+        "proveedor": null
+      },
+      {
+        "categoria": {
+          "activa": true,
+          "id": 1,
+          "nombre": "Computadoras"
+        },
+        "codigo": "LAP-002",
+        "descripcion": "Laptop empresarial",
+        "existencia": 8,
+        "id": 2,
+        "nombre": "Laptop Dell",
+        "precioVenta": 950.0,
+        "proveedor": {
+          "activo": true,
+          "correo": "ventas@techdist.com",
+          "id": 1,
+          "nombre": "Tech Distribuciones",
+          "telefono": "8888-1111"
+        }
+      }
+    ]
+  }
+]
