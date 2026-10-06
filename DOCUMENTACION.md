@@ -2,14 +2,14 @@
 
 ## Descripción
 
-La aplicación es una API REST hecha con Spring Boot para administrar categorías,
-productos, proveedores y etiquetas. Usa PostgreSQL, Spring Data JPA, Hibernate y
-Flyway.
+Este proyecto es una API REST para manejar productos categorias proveedores y
+etiquetas. Se hizo con Spring Boot y usa PostgreSQL, Spring Data JPA, Hibernate
+y Flyway.
 
-## Estructura
+## Estructura del proyecto
 
 ```text
-ni.edu.uam.gestionproductos
+src/main/java/ni/edu/uam/gestionproductos
 ├── controller
 ├── dto
 ├── entity
@@ -17,35 +17,38 @@ ni.edu.uam.gestionproductos
 └── service
 ```
 
-Los controladores reciben las peticiones HTTP. Los servicios contienen la lógica
-de la aplicación. Los repositorios trabajan con la base de datos. Las entidades
-representan las tablas y el DTO define los datos recibidos para un producto.
+El controller recibe las peticiones. El service contiene la logica de la
+aplicación. El repository se encarga del acceso a datos. Las entity representan
+las tablas y el dto recibe los datos que manda el cliente.
 
-## ProductoService y DTO
+## ProductoService
 
-`ProductoService` realiza el listado, búsqueda, registro, actualización,
-eliminación, consulta por categoría y asociación de etiquetas. El controlador
-usa el servicio y ya no accede directamente a `ProductoRepository`.
+`ProductoService` tiene los metodos para listar buscar guardar actualizar y
+eliminar productos. Tambien registra las relaciones con categoria proveedor y
+etiqueta. El controller usa este service en vez de usar directamente el
+repository.
 
-`ProductoRequestDTO` recibe estos datos:
+## ProductoRequestDTO
+
+El DTO recibe los datos del producto y los ids de las relaciones
 
 ```json
 {
   "codigo": "TEC-001",
-  "nombre": "Teclado mecánico",
+  "nombre": "Teclado mecanico",
   "descripcion": "Teclado para oficina",
   "precioVenta": 75.50,
   "existencia": 20,
-  "categoriaId": 2,
+  "categoriaId": 1,
   "proveedorId": 1,
   "etiquetaIds": [1, 2]
 }
 ```
 
-Enviar `categoriaId` es más sencillo y seguro que enviar una entidad `Categoria`
-completa. El Service busca la categoría y establece la relación.
+Usar `categoriaId` es mas sencillo que enviar toda la categoria. El service
+busca la categoria y la asigna al producto.
 
-## Endpoints principales
+## Endpoints
 
 ### Productos
 
@@ -61,107 +64,95 @@ POST   /api/productos/{productoId}/etiquetas/{etiquetaId}
 DELETE /api/productos/{productoId}/etiquetas/{etiquetaId}
 ```
 
-El DELETE responde `204 No Content`.
+El DELETE de producto devuelve 204. El DELETE de etiqueta tambien devuelve 204
+y solo quita la relacion no elimina las entidades.
 
-### Categorías y proveedores
+### Categorias proveedores y etiquetas
 
 ```text
 GET  /api/categorias
 POST /api/categorias
 GET  /api/proveedores
 POST /api/proveedores
-```
-
-### Etiquetas
-
-```text
 GET  /api/etiquetas
 POST /api/etiquetas
 ```
 
-Ejemplo para crear una etiqueta:
-
-```json
-{
-  "nombre": "Oferta"
-}
-```
-
-La guía propone crear: Oferta, Importado, Empresarial, Portátil y Gaming.
-
 ## Relaciones
 
-```mermaid
-erDiagram
-    CATEGORIA ||--o{ PRODUCTO : tiene
-    PROVEEDOR ||--o{ PRODUCTO : suministra
-    PRODUCTO }o--o{ ETIQUETA : usa
-    PRODUCTO ||--o{ PRODUCTO_ETIQUETA : relaciona
-    ETIQUETA ||--o{ PRODUCTO_ETIQUETA : relaciona
+```text
+CATEGORIA 1 ----- N PRODUCTO N ----- N ETIQUETA
+                         |
+                         N
+                     PROVEEDOR
 ```
 
-`categoria_id` está en la tabla `producto`, por eso Producto es el lado que
-contiene la clave foránea. `producto_etiqueta` es necesaria porque una relación
-Muchos a Muchos necesita guardar las claves de ambos lados.
+La relacion Categoria Producto usa `@ManyToOne` en Producto y `@OneToMany` en
+Categoria. La columna `categoria_id` esta en la tabla producto porque ahi se
+guarda la clave foranea.
 
-La relación categoría-producto es bidireccional con `@ManyToOne` y
-`@OneToMany`. La lista inversa se ignora al generar JSON para evitar ciclos.
+La relacion Producto Etiqueta usa `@ManyToMany` y `@JoinTable`. La tabla
+`producto_etiqueta` guarda `producto_id` y `etiqueta_id`. La lista inversa de
+Categoria y Etiqueta se ignora en el JSON para evitar ciclos.
 
 ## Migraciones
 
-- V1 crea `categoria` y `producto`.
-- V2 agrega `descripcion` a `producto`.
-- V3 crea `proveedor` y su relación con `producto`.
-- V4 crea `etiqueta` y `producto_etiqueta`.
-- V5 agrega la restricción de nombre único para las etiquetas, porque V4 ya había sido aplicada.
+- V1 crea las tablas categoria y producto
+- V2 agrega descripcion a producto
+- V3 crea proveedor y lo relaciona con producto
+- V4 crea etiqueta y producto_etiqueta
+- V5 agrega que el nombre de etiqueta no se repita porque V4 ya estaba aplicada
 
-Las migraciones son cambios ordenados de la base de datos. No se deben editar
-después de aplicarse.
-
-## Respuestas de comprobación
-
-1. `Service`: contiene la lógica de negocio.
-2. El controlador debe encargarse de HTTP y no mezclar todas las reglas con la persistencia.
-3. Un DTO es un objeto para transportar datos entre el cliente y la API.
-4. La entidad representa una tabla; el DTO representa los datos de una petición.
-5. `categoriaId` evita recibir un objeto completo y permite validar la relación en el Service.
-6. `@OneToMany` es uno a muchos y `@ManyToOne` es muchos a uno.
-7. La clave foránea está en `producto.categoria_id`.
-8. `@ManyToMany` representa muchos productos con muchas etiquetas.
-9. `@JoinTable` configura la tabla intermedia de la relación.
-10. `producto_etiqueta` guarda las dos claves foráneas de la relación N:N.
-11. El Repository realiza el acceso a datos mediante Spring Data JPA.
-12. El flujo es: Cliente → Controller → Service → Repository → PostgreSQL.
+Las migraciones las ejecuta Flyway y Hibernate usa `ddl-auto=validate`. Esto
+significa que Hibernate revisa si las tablas coinciden con las entidades pero no
+crea ni cambia tablas.
 
 ## Reto final
 
-El primer reto elimina solo la relación entre un producto y una etiqueta. No
-borra ninguna de las dos entidades. El segundo reto consulta los productos que
-tienen una etiqueta determinada mediante `GET /api/productos/etiqueta/{id}`.
+El primer reto elimina una asociacion sin borrar el producto ni la etiqueta
 
-## Configuración y pruebas
-
-La conexión está en `src/main/resources/application.properties` y utiliza la
-base `gestion_productos`. Hibernate usa `ddl-auto=validate`, por lo que valida
-el esquema pero no crea ni modifica tablas. Flyway administra las migraciones.
-
-Comandos:
-
-```powershell
-.\mvnw.cmd test
-.\mvnw.cmd verify
+```text
+DELETE /api/productos/{productoId}/etiquetas/{etiquetaId}
 ```
 
-La prueba realizada con PostgreSQL local terminó correctamente. Flyway validó
-las migraciones y la aplicación respondió las consultas de categorías,
-productos, etiquetas y productos por categoría. También se probó la creación
-de un producto y la asociación de etiquetas.
+El segundo reto busca los productos que tienen una etiqueta
 
-## Conclusión
+```text
+GET /api/productos/etiqueta/{etiquetaId}
+```
 
-Se organizó la API usando Controller, Service y Repository. Se agregó un DTO
-para recibir los datos de los productos y se completó su CRUD. También se
-implementó la consulta por categoría y la relación Muchos a Muchos entre
-productos y etiquetas. PostgreSQL guarda la información y Flyway controla las
-migraciones. Finalmente, los endpoints fueron probados con la aplicación
-conectada a la base de datos local.
+Los dos endpoints estan incluidos en la coleccion de Postman.
+
+## Respuestas de comprobacion
+
+1. Un Service contiene la logica de negocio y coordina los repositories.
+2. El controller debe manejar HTTP. Si contiene toda la logica se vuelve dificil de mantener.
+3. Un DTO es un objeto para transportar datos entre el cliente y la API.
+4. La entity representa una tabla JPA y el DTO representa los datos de una peticion.
+5. Recibir `categoriaId` evita mandar un objeto Categoria completo y permite validar la relacion en el service.
+6. `@OneToMany` representa uno a muchos y `@ManyToOne` muchos a uno.
+7. La clave foranea esta en `producto.categoria_id`.
+8. `@ManyToMany` representa muchos productos relacionados con muchas etiquetas.
+9. `@JoinTable` indica la tabla intermedia de la relacion.
+10. `producto_etiqueta` es necesaria para guardar las dos claves de una relacion N a N.
+11. El Repository hace las operaciones de acceso a la base mediante Spring Data JPA.
+12. El flujo es Cliente → Controller → Service → Repository → PostgreSQL.
+
+## Pruebas
+
+La coleccion para importar esta en:
+
+`postman/Gestion-productos.postman_collection.json`
+
+El proyecto usa Java 21. La aplicacion fue probada con PostgreSQL local y la
+base `gestion_productos`. Maven termino la prueba de contexto correctamente y
+Flyway valido las cinco migraciones.
+
+Las capturas de la practica estan en `evidencias/evidencias.docx`.
+
+## Conclusion
+
+Se organizo la API separando controller service repository entity y dto. Se
+agrego el CRUD de productos la consulta por categoria y la relacion entre
+productos y etiquetas. Tambien se implementaron las migraciones y los retos
+finales. PostgreSQL guarda los datos y Flyway controla los cambios de la base.
