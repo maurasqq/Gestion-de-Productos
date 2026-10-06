@@ -54,4 +54,9 @@ public class ProductoController {
     public Producto asociarEtiquetas(@PathVariable Integer id, @RequestBody List<Integer> etiquetaIds) {
         return service.asociarEtiquetas(id, etiquetaIds);
     }
+
+    @PostMapping("/{productoId}/etiquetas/{etiquetaId}")
+    public Producto agregarEtiqueta(@PathVariable Integer productoId, @PathVariable Integer etiquetaId) {
+        return service.agregarEtiqueta(productoId, etiquetaId);
+    }
 }

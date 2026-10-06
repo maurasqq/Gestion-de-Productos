@@ -325,7 +325,8 @@ Las migraciones anteriores V1, V2 y V3 no se modificaron.
 - `DELETE /api/productos/{id}`
 - `GET /api/etiquetas`
 - `POST /api/etiquetas`
-- `PUT /api/productos/{id}/etiquetas`
+- `POST /api/productos/{productoId}/etiquetas/{etiquetaId}`
+- `PUT /api/productos/{id}/etiquetas` (asociación múltiple adicional)
 
 Ejemplo de `POST` o `PUT` de producto:
 
@@ -342,8 +343,12 @@ Ejemplo de `POST` o `PUT` de producto:
 }
 ```
 
-Para asociar etiquetas a un producto existente, enviar a
-`PUT /api/productos/1/etiquetas` un arreglo como `[1, 2]`.
+Para asociar una etiqueta según la guía, enviar `POST
+/api/productos/1/etiquetas/1`. También se conserva el endpoint de asociación
+múltiple `PUT /api/productos/1/etiquetas` con un arreglo como `[1, 2]`.
+
+Las etiquetas sugeridas por la práctica son: Oferta, Importado, Empresarial,
+Portátil y Gaming.
 
 ## Comprobación de aprendizaje
 
