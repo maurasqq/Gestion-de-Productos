@@ -17,16 +17,17 @@ src/main/java/ni/edu/uam/gestionproductos
 └── service
 ```
 
-El controller recibe las peticiones. El service contiene la logica de la
+El controller recibe las peticiones. Los services contienen la logica de la
 aplicación. El repository se encarga del acceso a datos. Las entity representan
-las tablas y el dto recibe los datos que manda el cliente.
+las tablas y los dto reciben los datos que manda el cliente.
 
 ## ProductoService
 
 `ProductoService` tiene los metodos para listar buscar guardar actualizar y
 eliminar productos. Tambien registra las relaciones con categoria proveedor y
-etiqueta. El controller usa este service en vez de usar directamente el
-repository.
+etiqueta. Tambien existen `CategoriaService`, `ProveedorService` y
+`EtiquetaService` para que cada controller use su propio service en vez de
+usar directamente el repository.
 
 ## DTOs
 

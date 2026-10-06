@@ -8,32 +8,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ni.edu.uam.gestionproductos.entity.Proveedor;
 import ni.edu.uam.gestionproductos.dto.ProveedorRequestDTO;
-import ni.edu.uam.gestionproductos.repository.ProveedorRepository;
+import ni.edu.uam.gestionproductos.entity.Proveedor;
+import ni.edu.uam.gestionproductos.service.ProveedorService;
 
 @RestController
 @RequestMapping("/api/proveedores")
 public class ProveedorController {
 
-    private final ProveedorRepository repository;
+    private final ProveedorService service;
 
-    public ProveedorController(ProveedorRepository repository) {
-        this.repository = repository;
+    public ProveedorController(ProveedorService service) {
+        this.service = service;
     }
 
     @GetMapping
     public List<Proveedor> listar() {
-        return repository.findAll();
+        return service.listar();
     }
 
     @PostMapping
     public Proveedor crear(@RequestBody ProveedorRequestDTO dto) {
-        Proveedor proveedor = new Proveedor();
-        proveedor.setNombre(dto.getNombre());
-        proveedor.setTelefono(dto.getTelefono());
-        proveedor.setCorreo(dto.getCorreo());
-        proveedor.setActivo(dto.isActivo());
-        return repository.save(proveedor);
+        return service.crear(dto);
     }
 }

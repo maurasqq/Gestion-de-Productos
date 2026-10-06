@@ -10,28 +10,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ni.edu.uam.gestionproductos.entity.Categoria;
 import ni.edu.uam.gestionproductos.dto.CategoriaRequestDTO;
-import ni.edu.uam.gestionproductos.repository.CategoriaRepository;
+import ni.edu.uam.gestionproductos.service.CategoriaService;
 
 @RestController
 @RequestMapping("/api/categorias")
 public class CategoriaController {
 
-    private final CategoriaRepository repository;
+    private final CategoriaService service;
 
-    public CategoriaController(CategoriaRepository repository) {
-        this.repository = repository;
+    public CategoriaController(CategoriaService service) {
+        this.service = service;
     }
 
     @GetMapping
     public List<Categoria> listar() {
-        return repository.findAll();
+        return service.listar();
     }
 
     @PostMapping
     public Categoria crear(@RequestBody CategoriaRequestDTO dto) {
-        Categoria categoria = new Categoria();
-        categoria.setNombre(dto.getNombre());
-        categoria.setActiva(dto.isActiva());
-        return repository.save(categoria);
+        return service.crear(dto);
     }
 }
