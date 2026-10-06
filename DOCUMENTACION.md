@@ -28,9 +28,15 @@ eliminar productos. Tambien registra las relaciones con categoria proveedor y
 etiqueta. El controller usa este service en vez de usar directamente el
 repository.
 
-## ProductoRequestDTO
+## DTOs
 
-El DTO recibe los datos del producto y los ids de las relaciones
+La API usa DTOs para recibir datos en los POST. Existen `CategoriaRequestDTO`,
+`ProductoRequestDTO`, `ProveedorRequestDTO` y `EtiquetaRequestDTO`. Las
+respuestas siguen usando las entidades para mostrar los datos guardados.
+
+### ProductoRequestDTO
+
+Este DTO recibe los datos del producto y los ids de las relaciones
 
 ```json
 {

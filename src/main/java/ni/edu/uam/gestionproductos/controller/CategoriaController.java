@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ni.edu.uam.gestionproductos.entity.Categoria;
+import ni.edu.uam.gestionproductos.dto.CategoriaRequestDTO;
 import ni.edu.uam.gestionproductos.repository.CategoriaRepository;
 
 @RestController
@@ -27,7 +28,10 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public Categoria crear(@RequestBody Categoria categoria) {
+    public Categoria crear(@RequestBody CategoriaRequestDTO dto) {
+        Categoria categoria = new Categoria();
+        categoria.setNombre(dto.getNombre());
+        categoria.setActiva(dto.isActiva());
         return repository.save(categoria);
     }
 }

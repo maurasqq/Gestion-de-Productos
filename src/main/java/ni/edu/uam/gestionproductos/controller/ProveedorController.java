@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ni.edu.uam.gestionproductos.entity.Proveedor;
+import ni.edu.uam.gestionproductos.dto.ProveedorRequestDTO;
 import ni.edu.uam.gestionproductos.repository.ProveedorRepository;
 
 @RestController
@@ -27,7 +28,12 @@ public class ProveedorController {
     }
 
     @PostMapping
-    public Proveedor crear(@RequestBody Proveedor proveedor) {
+    public Proveedor crear(@RequestBody ProveedorRequestDTO dto) {
+        Proveedor proveedor = new Proveedor();
+        proveedor.setNombre(dto.getNombre());
+        proveedor.setTelefono(dto.getTelefono());
+        proveedor.setCorreo(dto.getCorreo());
+        proveedor.setActivo(dto.isActivo());
         return repository.save(proveedor);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ni.edu.uam.gestionproductos.entity.Etiqueta;
+import ni.edu.uam.gestionproductos.dto.EtiquetaRequestDTO;
 import ni.edu.uam.gestionproductos.repository.EtiquetaRepository;
 
 @RestController
@@ -17,5 +18,9 @@ public class EtiquetaController {
     @GetMapping
     public List<Etiqueta> listar() { return repository.findAll(); }
     @PostMapping
-    public Etiqueta crear(@RequestBody Etiqueta etiqueta) { return repository.save(etiqueta); }
+    public Etiqueta crear(@RequestBody EtiquetaRequestDTO dto) {
+        Etiqueta etiqueta = new Etiqueta();
+        etiqueta.setNombre(dto.getNombre());
+        return repository.save(etiqueta);
+    }
 }
