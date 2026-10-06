@@ -34,6 +34,7 @@ public class ProductoService {
     public Producto buscar(Integer id) { return productoRepository.findById(id).orElseThrow(); }
     public Producto buscarPorId(Integer id) { return buscar(id); }
     public List<Producto> listarPorCategoria(Integer categoriaId) { return productoRepository.findByCategoriaId(categoriaId); }
+    public List<Producto> listarPorEtiqueta(Integer etiquetaId) { return productoRepository.findByEtiquetasId(etiquetaId); }
 
     public Producto guardar(ProductoRequestDTO dto) {
         return productoRepository.save(construir(new Producto(), dto));
@@ -68,6 +69,12 @@ public class ProductoService {
         Producto producto = buscarPorId(productoId);
         Etiqueta etiqueta = etiquetaRepository.findById(etiquetaId).orElseThrow();
         producto.getEtiquetas().add(etiqueta);
+        return productoRepository.save(producto);
+    }
+
+    public Producto eliminarEtiqueta(Integer productoId, Integer etiquetaId) {
+        Producto producto = buscarPorId(productoId);
+        producto.getEtiquetas().removeIf(etiqueta -> etiqueta.getId().equals(etiquetaId));
         return productoRepository.save(producto);
     }
 }

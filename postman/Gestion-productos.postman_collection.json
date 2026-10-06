@@ -70,7 +70,15 @@
       "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/etiquetas" }
     },
     {
-      "name": "10. DELETE producto",
+      "name": "10. GET productos por etiqueta",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/productos/etiqueta/{{etiquetaId}}" }
+    },
+    {
+      "name": "11. DELETE asociacion producto etiqueta",
+      "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/productos/{{productoId}}/etiquetas/{{etiquetaId}}" }
+    },
+    {
+      "name": "12. DELETE producto",
       "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/productos/{{productoId}}" }
     }
   ]

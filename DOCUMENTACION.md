@@ -56,7 +56,9 @@ POST   /api/productos
 PUT    /api/productos/{id}
 DELETE /api/productos/{id}
 GET    /api/productos/categoria/{categoriaId}
+GET    /api/productos/etiqueta/{etiquetaId}
 POST   /api/productos/{productoId}/etiquetas/{etiquetaId}
+DELETE /api/productos/{productoId}/etiquetas/{etiquetaId}
 ```
 
 El DELETE responde `204 No Content`.
@@ -130,6 +132,12 @@ después de aplicarse.
 10. `producto_etiqueta` guarda las dos claves foráneas de la relación N:N.
 11. El Repository realiza el acceso a datos mediante Spring Data JPA.
 12. El flujo es: Cliente → Controller → Service → Repository → PostgreSQL.
+
+## Reto final
+
+El primer reto elimina solo la relación entre un producto y una etiqueta. No
+borra ninguna de las dos entidades. El segundo reto consulta los productos que
+tienen una etiqueta determinada mediante `GET /api/productos/etiqueta/{id}`.
 
 ## Configuración y pruebas
 

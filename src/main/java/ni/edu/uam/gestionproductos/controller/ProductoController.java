@@ -38,6 +38,11 @@ public class ProductoController {
         return service.listarPorCategoria(categoriaId);
     }
 
+    @GetMapping("/etiqueta/{etiquetaId}")
+    public List<Producto> listarPorEtiqueta(@PathVariable Integer etiquetaId) {
+        return service.listarPorEtiqueta(etiquetaId);
+    }
+
     @PostMapping
     public Producto crear(@RequestBody ProductoRequestDTO dto) { return service.guardar(dto); }
 
@@ -58,5 +63,11 @@ public class ProductoController {
     @PostMapping("/{productoId}/etiquetas/{etiquetaId}")
     public Producto agregarEtiqueta(@PathVariable Integer productoId, @PathVariable Integer etiquetaId) {
         return service.agregarEtiqueta(productoId, etiquetaId);
+    }
+
+    @DeleteMapping("/{productoId}/etiquetas/{etiquetaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminarEtiqueta(@PathVariable Integer productoId, @PathVariable Integer etiquetaId) {
+        service.eliminarEtiqueta(productoId, etiquetaId);
     }
 }
