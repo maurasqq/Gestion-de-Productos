@@ -152,6 +152,18 @@ bloqueado al intentar obtenerlas.
 - La estructura Java, las migraciones, la colección de Postman y las evidencias
   históricas anteriores se conservaron porque ya estaban presentes en el proyecto.
 
+## Verificación actual con PostgreSQL
+
+En la revisión del 5 de octubre de 2026 se corrigió la contraseña local de
+PostgreSQL a `666`. La prueba `mvnw.cmd test` terminó con BUILD SUCCESS y una
+prueba aprobada. Flyway validó las cuatro migraciones y aplicó V4; Hibernate
+validó el esquema correctamente.
+
+También respondieron HTTP 200 `GET /api/categorias`, `GET /api/productos`,
+`GET /api/productos/categoria/1` y `GET /api/etiquetas`. Se crearon las etiquetas
+`Oficina` y `Portatil`, el producto `LAP-003` y su asociación N:N. Estos datos
+quedaron en la base local para facilitar las capturas de la práctica.
+
 ## Pruebas en Postman, en orden
 
 Importa [la colección](postman/Gestion-productos.postman_collection.json).
