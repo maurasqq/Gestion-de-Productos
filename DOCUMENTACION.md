@@ -260,3 +260,97 @@ los devueltos por tus POST si difieren de 1.
 Para las capturas pendientes, muestra la URL, método, cuerpo enviado y respuesta
 con estado HTTP en Postman. En pgAdmin ejecuta `evidencias/consultas.sql` y captura
 los resultados de cada consulta, incluida `flyway_schema_history`.
+
+---
+
+# Práctica Guiada 2: servicios, DTOs y etiquetas
+
+## Responsabilidades de los paquetes
+
+- `controller`: recibe solicitudes HTTP y devuelve respuestas.
+- `service`: contiene la lógica de negocio y coordina las operaciones.
+- `repository`: accede a las entidades mediante Spring Data JPA.
+- `entity`: representa las tablas y relaciones persistentes.
+- `dto`: define los datos que recibe la API sin exponer la entidad como entrada.
+
+## Cambios implementados
+
+`ProductoController` ahora delega en `ProductoService`. `ProductoService` registra,
+consulta, actualiza, elimina y busca productos por categoría. El DTO recibe
+`categoriaId`, `proveedorId` y una lista de `etiquetaIds`; el servicio convierte
+esos identificadores en relaciones JPA.
+
+La relación categoría-producto es bidireccional: una categoría tiene muchos
+productos y cada producto pertenece a una categoría. La clave foránea
+`categoria_id` permanece en `producto`. Se usa `@JsonIgnore` en la colección
+inversa para evitar ciclos al generar JSON.
+
+## Relación Muchos a Muchos
+
+```mermaid
+erDiagram
+    CATEGORIA ||--o{ PRODUCTO : contiene
+    PROVEEDOR ||--o{ PRODUCTO : suministra
+    PRODUCTO }o--o{ ETIQUETA : clasifica
+    PRODUCTO ||--o{ PRODUCTO_ETIQUETA : tiene
+    ETIQUETA ||--o{ PRODUCTO_ETIQUETA : pertenece
+```
+
+`@ManyToMany` representa que un producto puede tener varias etiquetas y una
+etiqueta puede estar asociada con varios productos. `@JoinTable` define la tabla
+intermedia `producto_etiqueta`, que almacena las dos claves foráneas.
+
+La migración `V4__crear_etiquetas.sql` crea `etiqueta` y `producto_etiqueta`.
+Las migraciones anteriores V1, V2 y V3 no se modificaron.
+
+## Endpoints agregados y CRUD de productos
+
+- `GET /api/productos`
+- `GET /api/productos/{id}`
+- `GET /api/productos/categoria/{categoriaId}`
+- `POST /api/productos`
+- `PUT /api/productos/{id}`
+- `DELETE /api/productos/{id}`
+- `GET /api/etiquetas`
+- `POST /api/etiquetas`
+- `PUT /api/productos/{id}/etiquetas`
+
+Ejemplo de `POST` o `PUT` de producto:
+
+```json
+{
+  "codigo": "LAP-003",
+  "nombre": "Laptop HP",
+  "descripcion": "Laptop para oficina",
+  "precioVenta": 780.00,
+  "existencia": 6,
+  "categoriaId": 1,
+  "proveedorId": 1,
+  "etiquetaIds": [1, 2]
+}
+```
+
+Para asociar etiquetas a un producto existente, enviar a
+`PUT /api/productos/1/etiquetas` un arreglo como `[1, 2]`.
+
+## Comprobación de aprendizaje
+
+1. Una clase Service concentra la lógica de negocio y coordina repositorios.
+2. El controlador no debería contener toda la lógica porque debe encargarse de HTTP, no de persistencia y reglas del dominio.
+3. Un DTO es un objeto para transportar datos entre el cliente y la API.
+4. Una entidad JPA representa una tabla persistente; un DTO representa los datos de una operación concreta.
+5. Recibir `categoriaId` evita enviar una entidad completa y permite que el Service valide y cargue la relación.
+6. `@OneToMany` representa uno a muchos y `@ManyToOne` muchos a uno.
+7. La clave foránea se almacena en `producto.categoria_id`.
+8. `@ManyToMany` representa una relación muchos a muchos entre dos entidades.
+9. `@JoinTable` configura la tabla que mantiene las claves de una relación N:N.
+10. `producto_etiqueta` es necesaria porque una relación N:N no se guarda directamente en una sola tabla.
+11. El Repository realiza operaciones de acceso a datos y consultas mediante JPA.
+12. El flujo es: Cliente → Controller → Service → Repository → PostgreSQL; la respuesta regresa por la misma cadena en sentido inverso.
+
+## Capturas adicionales
+
+Además de las capturas anteriores, tomar capturas de los paquetes `service` y
+`dto`, `ProductoService`, `ProductoRequestDTO`, los métodos GET/POST/PUT/DELETE,
+la consulta por categoría, la migración V4, la tabla `etiqueta`, la tabla
+`producto_etiqueta` y la asociación enviada desde Postman.
