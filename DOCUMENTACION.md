@@ -149,17 +149,6 @@ las migraciones y la aplicación respondió las consultas de categorías,
 productos, etiquetas y productos por categoría. También se probó la creación
 de un producto y la asociación de etiquetas.
 
-## Capturas para entregar
-
-- Estructura de paquetes.
-- `ProductoService` y `ProductoRequestDTO`.
-- GET, POST, PUT y DELETE de productos en Postman.
-- Consulta de productos por categoría.
-- V4 y la tabla `producto_etiqueta` en PostgreSQL.
-- Entidad y repositorio `Etiqueta`.
-- Asociación de etiquetas mediante Postman.
-- Tabla `flyway_schema_history`.
-
 ## Conclusión
 
 Se organizó la API usando Controller, Service y Repository. Se agregó un DTO

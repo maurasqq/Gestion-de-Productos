@@ -1,331 +1,77 @@
 {
   "info": {
-    "name": "Gestión de productos",
+    "name": "gestion-productos",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080"
-    },
-    {
-      "key": "categoriaId",
-      "value": "1"
-    },
-    {
-      "key": "proveedorId",
-      "value": "1"
-    }
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "categoriaId", "value": "1" },
+    { "key": "productoId", "value": "" },
+    { "key": "etiquetaId", "value": "" }
   ],
   "item": [
     {
       "name": "1. GET categorias",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/categorias" }
+    },
+    {
+      "name": "2. POST categoria",
       "request": {
-        "method": "GET",
-        "header": [],
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Accesorios\",\n  \"activa\": true\n}" },
         "url": "{{baseUrl}}/api/categorias"
       },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('categoriaId', pm.response.json().id);"] } }]
     },
     {
-      "name": "2. POST categorias - Computadoras",
+      "name": "3. POST producto",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/categorias",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Computadoras\",\n  \"activa\": true\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
-              "pm.collectionVariables.set(\"categoriaId\", pm.response.json().id);"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "3. POST categorias - Accesorios",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/categorias",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Accesorios\",\n  \"activa\": true\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "4. POST categorias - Monitores",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/categorias",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Monitores\",\n  \"activa\": true\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "5. GET categorias",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": "{{baseUrl}}/api/categorias"
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "6. POST proveedores - Tech Distribuciones",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/proveedores",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Tech Distribuciones\",\n  \"telefono\": \"8888-1111\",\n  \"correo\": \"ventas@techdist.com\",\n  \"activo\": true\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
-              "pm.collectionVariables.set(\"proveedorId\", pm.response.json().id);"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "7. POST proveedores - Global Hardware",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/proveedores",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Global Hardware\",\n  \"telefono\": \"8888-2222\",\n  \"correo\": \"ventas@globalhardware.com\",\n  \"activo\": true\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "8. GET proveedores",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": "{{baseUrl}}/api/proveedores"
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "9. POST productos - Laptop Lenovo",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/productos",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"codigo\": \"LAP-001\",\n  \"nombre\": \"Laptop Lenovo\",\n  \"categoria\": {\n    \"id\": {{categoriaId}}\n  },\n  \"precioVenta\": 850,\n  \"existencia\": 10\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "10. POST productos - Laptop Dell",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/api/productos",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"codigo\": \"LAP-002\",\n  \"nombre\": \"Laptop Dell\",\n  \"descripcion\": \"Laptop empresarial\",\n  \"categoria\": {\n    \"id\": {{categoriaId}}\n  },\n  \"proveedor\": {\n    \"id\": {{proveedorId}}\n  },\n  \"precioVenta\": 950,\n  \"existencia\": 8\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "11. GET productos",
-      "request": {
-        "method": "GET",
-        "header": [],
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"codigo\": \"TEC-POSTMAN-001\",\n  \"nombre\": \"Teclado mecánico\",\n  \"descripcion\": \"Teclado para prueba\",\n  \"precioVenta\": 75.50,\n  \"existencia\": 20,\n  \"categoriaId\": {{categoriaId}},\n  \"etiquetaIds\": []\n}" },
         "url": "{{baseUrl}}/api/productos"
       },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
-            ]
-          }
-        }
-      ]
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('productoId', pm.response.json().id);"] } }]
+    },
+    {
+      "name": "4. GET productos",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/productos" }
+    },
+    {
+      "name": "5. GET productos por categoria",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/productos/categoria/{{categoriaId}}" }
+    },
+    {
+      "name": "6. PUT producto",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"codigo\": \"TEC-POSTMAN-001\",\n  \"nombre\": \"Teclado actualizado\",\n  \"precioVenta\": 80.00,\n  \"existencia\": 15,\n  \"categoriaId\": {{categoriaId}},\n  \"etiquetaIds\": []\n}" },
+        "url": "{{baseUrl}}/api/productos/{{productoId}}"
+      }
+    },
+    {
+      "name": "7. POST etiqueta",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Gaming-Postman\"\n}" },
+        "url": "{{baseUrl}}/api/etiquetas"
+      },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('etiquetaId', pm.response.json().id);"] } }]
+    },
+    {
+      "name": "8. POST asociar etiqueta",
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/productos/{{productoId}}/etiquetas/{{etiquetaId}}" }
+    },
+    {
+      "name": "9. GET etiquetas",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/etiquetas" }
+    },
+    {
+      "name": "10. DELETE producto",
+      "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/productos/{{productoId}}" }
     }
   ]
 }
