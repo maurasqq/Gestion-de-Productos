@@ -3,6 +3,8 @@ package ni.edu.uam.gestionproductos.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import ni.edu.uam.gestionproductos.entity.Producto;
+import java.util.List;
 
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
+    List<Producto> findByCategoriaId(Integer categoriaId);
 }
