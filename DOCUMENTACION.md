@@ -149,7 +149,7 @@ las migraciones y la aplicación respondió las consultas de categorías,
 productos, etiquetas y productos por categoría. También se probó la creación
 de un producto y la asociación de etiquetas.
 
-## Capturas pendientes
+## Capturas para entregar
 
 - Estructura de paquetes.
 - `ProductoService` y `ProductoRequestDTO`.

@@ -1,0 +1,28 @@
+meta {
+  name: POST producto
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/api/productos
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "codigo": "TEC-001",
+    "nombre": "Teclado mecánico",
+    "descripcion": "Teclado para oficina",
+    "precioVenta": 75.50,
+    "existencia": 20,
+    "categoriaId": 1,
+    "proveedorId": 1,
+    "etiquetaIds": []
+  }
+}

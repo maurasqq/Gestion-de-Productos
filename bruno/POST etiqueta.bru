@@ -1,0 +1,21 @@
+meta {
+  name: POST etiqueta
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:8080/api/etiquetas
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nombre": "Gaming"
+  }
+}
