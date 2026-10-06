@@ -44,6 +44,24 @@ V1 crea las tablas iniciales `categoria` y `producto`. V2 agrega la descripción
 
 Puede provocar referencias circulares: la categoría o el proveedor incluye productos y cada producto vuelve a incluir la categoría o el proveedor. Esto puede generar recursión infinita, respuestas demasiado grandes o errores de serialización.
 
+## Estructura general del proyecto
+
+```text
+src/main/java/ni/edu/uam/gestionproductos/
+├── controller/   CategoriaController, ProductoController, ProveedorController
+├── entity/       Categoria, Producto, Proveedor
+└── repository/   CategoriaRepository, ProductoRepository, ProveedorRepository
+
+src/main/resources/
+├── application.properties
+└── db/migration/ V1__crear_tablas.sql, V2__agregar_descripcion_producto.sql,
+                  V3__crear_proveedor_y_relacionar_producto.sql
+```
+
+`spring.jpa.hibernate.ddl-auto=validate` hace que Hibernate compare el esquema
+existente con las entidades al iniciar. Si encuentra diferencias, la aplicación
+falla; no crea, elimina ni modifica tablas. La estructura la administra Flyway.
+
 ## Conclusión
 
 La práctica permitió conectar una aplicación Spring Boot con PostgreSQL.
@@ -71,10 +89,10 @@ El proyecto usa Maven, Java 21, groupId `ni.edu.uam` y paquete raíz
 `ni.edu.uam.gestionproductos`. Las dependencias necesarias ya estaban presentes.
 No utiliza Lombok.
 
-La base `gestion_productos` ya existe. Antes de iniciar, define
-`SPRING_DATASOURCE_PASSWORD` con la contraseña local de PostgreSQL en el entorno
-de ejecución (en IntelliJ: Run → Edit Configurations → Environment variables).
-La contraseña real no se guarda en Git. Luego, desde la raíz del proyecto:
+La base `gestion_productos` debe existir y la contraseña local del usuario
+`postgres` debe coincidir con la configurada en `application.properties`.
+Si la contraseña local es diferente, actualiza ese valor únicamente en tu copia
+local antes de iniciar la aplicación. Luego, desde la raíz del proyecto:
 
 ```powershell
 .\mvnw.cmd verify
@@ -123,6 +141,16 @@ Evidencias obtenidas directamente durante la ejecución:
 Estas evidencias son salidas reales de HTTP y PostgreSQL. No son capturas de
 Postman. Las capturas de Postman y pgAdmin siguen pendientes: Windows estaba
 bloqueado al intentar obtenerlas.
+
+## Verificación de esta revisión
+
+- `mvnw.cmd -DskipTests package`: BUILD SUCCESS.
+- `mvnw.cmd test`: no completó porque PostgreSQL rechazó la contraseña de
+  `postgres` configurada en el entorno actual (SQL State `28P01`).
+- No se ejecutaron nuevas peticiones HTTP ni nuevas consultas PostgreSQL en esta
+  revisión por esa misma falta de autenticación.
+- La estructura Java, las migraciones, la colección de Postman y las evidencias
+  históricas anteriores se conservaron porque ya estaban presentes en el proyecto.
 
 ## Pruebas en Postman, en orden
 
