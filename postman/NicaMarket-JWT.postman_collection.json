@@ -1,0 +1,21 @@
+{
+  "info": {
+    "name": "NicaMarket – JWT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "adminToken", "value": "" },
+    { "key": "userToken", "value": "" }
+  ],
+  "item": [
+    { "name": "01 - Saludo público (200)", "request": { "method": "GET", "url": "{{baseUrl}}/api/publico/saludo" } },
+    { "name": "02 - Login admin", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin123!\"\n}" }, "url": "{{baseUrl}}/api/auth/login" } },
+    { "name": "03 - Login operador", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"username\": \"operador\",\n  \"password\": \"Operador123!\"\n}" }, "url": "{{baseUrl}}/api/auth/login" } },
+    { "name": "04 - Perfil autenticado (200)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }], "url": "{{baseUrl}}/api/auth/perfil" } },
+    { "name": "05 - Categorías sin token (401)", "request": { "method": "GET", "url": "{{baseUrl}}/api/categorias" } },
+    { "name": "06 - Categorías operador (200)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }], "url": "{{baseUrl}}/api/categorias" } },
+    { "name": "07 - Crear categoría operador (403)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Categoría de prueba\",\n  \"activa\": true\n}" }, "url": "{{baseUrl}}/api/categorias" } },
+    { "name": "08 - Crear categoría admin (201/200 según API)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Categoría admin\",\n  \"activa\": true\n}" }, "url": "{{baseUrl}}/api/categorias" } }
+  ]
+}
