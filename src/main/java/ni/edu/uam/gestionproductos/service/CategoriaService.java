@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import ni.edu.uam.gestionproductos.dto.CategoriaRequestDTO;
 import ni.edu.uam.gestionproductos.entity.Categoria;
 import ni.edu.uam.gestionproductos.repository.CategoriaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CategoriaService {
@@ -25,5 +27,20 @@ public class CategoriaService {
         categoria.setNombre(dto.getNombre());
         categoria.setActiva(dto.isActiva());
         return repository.save(categoria);
+    }
+
+    public Categoria actualizar(Integer id, CategoriaRequestDTO dto) {
+        Categoria categoria = repository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoría no encontrada"));
+        categoria.setNombre(dto.getNombre());
+        categoria.setActiva(dto.isActiva());
+        return repository.save(categoria);
+    }
+
+    public void eliminar(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoría no encontrada");
+        }
+        repository.deleteById(id);
     }
 }
