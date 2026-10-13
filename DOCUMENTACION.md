@@ -74,16 +74,44 @@ DELETE /api/productos/{productoId}/etiquetas/{etiquetaId}
 El DELETE de producto devuelve 204. El DELETE de etiqueta tambien devuelve 204
 y solo quita la relacion no elimina las entidades.
 
-### Categorias proveedores y etiquetas
+### Autenticación y acceso público
 
 ```text
-GET  /api/categorias
-POST /api/categorias
+POST /api/auth/login
+GET  /api/auth/perfil
+GET  /api/publico/saludo
+```
+
+`POST /api/auth/login` y `GET /api/publico/saludo` son públicos. El endpoint
+`GET /api/auth/perfil` requiere un token Bearer válido y devuelve el usuario
+identificado junto con sus roles.
+
+### Categorías, proveedores y etiquetas
+
+```text
+GET    /api/categorias
+POST   /api/categorias
+PUT    /api/categorias/{id}
+DELETE /api/categorias/{id}
 GET  /api/proveedores
 POST /api/proveedores
 GET  /api/etiquetas
 POST /api/etiquetas
 ```
+
+`GET /api/categorias` está permitido para `USER` y `ADMIN`. Las operaciones
+`POST`, `PUT` y `DELETE` de categorías requieren el rol `ADMIN`.
+
+### Reglas de seguridad
+
+Todas las rutas de productos y categorías requieren autenticación. Las
+consultas `GET` aceptan los roles `USER` y `ADMIN`; las operaciones de escritura
+requieren `ADMIN`. Una solicitud sin token o con token inválido devuelve `401`.
+Una solicitud autenticada sin el rol necesario devuelve `403`.
+
+El token se firma con HS256 usando la variable de entorno
+`JWT_SECRET_BASE64`. La clave debe tener al menos 32 bytes y no debe publicarse
+en el repositorio.
 
 ## Relaciones
 
@@ -147,9 +175,9 @@ Los dos endpoints estan incluidos en la coleccion de Postman.
 
 ## Pruebas
 
-La coleccion para importar esta en:
+La coleccion actualizada para importar esta en:
 
-`postman/Gestion-productos.postman_collection.json`
+`postman/NicaMarket-JWT.postman_collection.json`
 
 El proyecto usa Java 21. La aplicacion fue probada con PostgreSQL local y la
 base `gestion_productos`. Maven termino la prueba de contexto correctamente y
@@ -160,6 +188,6 @@ Las capturas de la practica estan en `evidencias/evidencias.docx`.
 ## Conclusion
 
 Se organizo la API separando controller service repository entity y dto. Se
-agrego el CRUD de productos la consulta por categoria y la relacion entre
-productos y etiquetas. Tambien se implementaron las migraciones y los retos
-finales. PostgreSQL guarda los datos y Flyway controla los cambios de la base.
+agrego autenticacion JWT, autorizacion por roles, el perfil autenticado y el
+CRUD protegido de categorías, además del CRUD de productos y sus relaciones.
+PostgreSQL guarda los datos y Flyway controla los cambios de la base.
