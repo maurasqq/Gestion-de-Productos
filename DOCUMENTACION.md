@@ -191,3 +191,18 @@ Se organizo la API separando controller service repository entity y dto. Se
 agrego autenticacion JWT, autorizacion por roles, el perfil autenticado y el
 CRUD protegido de categorías, además del CRUD de productos y sus relaciones.
 PostgreSQL guarda los datos y Flyway controla los cambios de la base.
+
+## Preguntas de cierre
+
+1. **¿En qué se diferencian HTTP 401 y 403?** `401` significa que falta una
+   autenticación válida; `403` significa que el usuario está autenticado, pero
+   no tiene permisos suficientes.
+2. **¿Por qué no basta con leer el contenido de un JWT para confiar en él?**
+   Porque el contenido solo está codificado y puede ser alterado; el servidor
+   debe validar la firma, el vencimiento y las reclamaciones.
+3. **¿Qué función cumple `JwtDecoder`?** Valida la firma HS256, comprueba las
+   reclamaciones del token y lo convierte en una autenticación utilizable por
+   Spring Security.
+4. **¿Qué riesgos ocasionaría publicar la clave utilizada para firmar tokens?**
+   Un tercero podría fabricar tokens válidos con roles elevados y acceder o
+   modificar recursos protegidos.
